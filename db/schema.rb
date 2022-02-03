@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220202083318) do
+ActiveRecord::Schema.define(version: 20220203133327) do
+
+  create_table "customer_additional_infos", force: :cascade do |t|
+    t.integer  "customer_entity_id", limit: 4
+    t.date     "birthday"
+    t.date     "anniversary"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "customer_entities", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -19,6 +27,19 @@ ActiveRecord::Schema.define(version: 20220202083318) do
     t.string   "mobile",     limit: 20
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  add_index "customer_entities", ["email"], name: "index_customer_entities_on_email", unique: true, using: :btree
+
+  create_table "sales_flat_coupons", force: :cascade do |t|
+    t.integer  "customer_entity_id", limit: 4
+    t.string   "coupon",             limit: 255
+    t.integer  "coupon_type",        limit: 4
+    t.boolean  "is_active"
+    t.boolean  "is_used"
+    t.date     "expiry"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
 end

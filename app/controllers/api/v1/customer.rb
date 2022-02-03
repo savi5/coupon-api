@@ -1,5 +1,6 @@
 module API::V1
     class Customer < Grape::API
+          require './lib/api/validation'
         resource :customer do 
 
             desc 'Get users'
@@ -19,9 +20,11 @@ module API::V1
 
         desc 'Create user'
         params do
-        requires :name,type: String,desc: 'Name of the user', allow_blank: false, regexp: /w+/
-        requires :email, type: String,desc: 'Email of the user',allow_blank: false, regexp: /.+@.+/
-        requires :mobile, type: Numeric,desc: 'Mobile no of the user'
+            requires :name,type: String,allow_blank: false,alpha: true,min_length: 2,desc: 'Name of the user'
+            requires :email, type: String,allow_blank: false,email: true,desc: 'Email of the user'
+            requires :mobile, type: String,desc: 'Mobile no of the user', mobile: true
+            optional :birthday, type: Date,desc: 'Birth date of the user'
+            optional :anniversary, type: Date, desc: 'Spouse birthday for the user'
         end
         post '/' do
             result = CustomerEntity.create_user(params)
@@ -36,6 +39,8 @@ module API::V1
             status
 
         end
+       
+
         end
     end
 end
