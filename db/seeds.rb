@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+CustomerEntity.create(name:"testUserA",email:"testA@gmail.com",mobile:"9043231234")
+CustomerEntity.create(name:"testUserB",email:"testB@gmail.com",mobile:"9043231222")

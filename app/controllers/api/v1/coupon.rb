@@ -8,7 +8,7 @@ module API::V1
                 result = SalesFlatCoupon.all
                  status = {}
                 if result.blank?
-                    status(404)
+                    status(500)
                     status = { code: false, message: 'Something went wrong' }
                 else
                     status(200)
@@ -33,10 +33,10 @@ module API::V1
                 result = SalesFlatCoupon.create_coupon(params)
                 status = {}
                     if result.blank?
-                        status(404)
+                        status(500)
                         status = { code: false, message: 'Something went wrong' }
                     else
-                        status(200)
+                        status(201)
                         status = { code: true , message:'Coupon Created successfully',coupon: result}
                     end
             end
@@ -62,7 +62,7 @@ module API::V1
             result = coupon.update_coupon(params)
             status = {}
                 if result.blank?
-                    status(404)
+                    status(500)
                     status = { code: false, message: 'Something went wrong' }
                 else
                     status(200)
@@ -87,7 +87,7 @@ module API::V1
             result = coupon.destroy
             status = {}
                 if result.blank?
-                    status(404)
+                    status(500)
                     status = { code: false, message: 'Something went wrong' }
                 else
                     status(200)

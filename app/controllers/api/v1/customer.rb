@@ -8,7 +8,7 @@ module API::V1
                 result = CustomerEntity.all
                  status = {}
                 if result.blank?
-                    status(404)
+                    status(500)
                     status = { code: false, message: 'Something went wrong' }
                 else
                     status(200)
@@ -20,7 +20,7 @@ module API::V1
 
         desc 'Create user'
         params do
-            requires :name,type: String,allow_blank: false,alpha: true,min_length: 2,desc: 'Name of the user'
+            requires :name,type: String,allow_blank: false,min_length: 2,alpha: true,desc: 'Name of the user'
             requires :email, type: String,allow_blank: false,email: true,desc: 'Email of the user'
             requires :mobile, type: String,desc: 'Mobile no of the user', mobile: true
             optional :birthday, type: Date,desc: 'Birth date of the user'
@@ -30,11 +30,11 @@ module API::V1
             result = CustomerEntity.create_user(params)
             status = {}
                 if result.blank?
-                    status(404)
+                    status(500)
                     status = { code: false, message: 'Something went wrong' }
                 else
-                    status(200)
-                    status = { code: true , message:'User Created successfully',user: result}
+                    status(201)
+                    status = { code: true , message:'User Created successfully',data: result.get_customer_details}
                 end
             status
 
@@ -59,11 +59,11 @@ module API::V1
             result = user.update_user(params)
             status = {}
                 if result.blank?
-                    status(404)
+                    status(500)
                     status = { code: false, message: 'Something went wrong' }
                 else
                     status(200)
-                    status = { code: true , message:'User updated successfully',user: result}
+                    status = { code: true , message:'User updated successfully',data: user.get_customer_details}
                 end
             end
             status
@@ -84,11 +84,11 @@ module API::V1
             result = user.destroy
             status = {}
                 if result.blank?
-                    status(404)
+                    status(500)
                     status = { code: false, message: 'Something went wrong' }
                 else
                     status(200)
-                    status = { code: true , message:'User deleted successfully',user: result}
+                    status = { code: true , message:'User deleted successfully'}
                 end
             end
             status

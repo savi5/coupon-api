@@ -1,3 +1,4 @@
+
 class CustomerEntity < ActiveRecord::Base
 	self.table_name = 'customer_entities'
 	validates :name,:email,:mobile, presence: true
@@ -11,13 +12,14 @@ class CustomerEntity < ActiveRecord::Base
 
 	def self.create_user params
         begin
+			user = {}
         	ActiveRecord::Base.transaction do
 			user = CustomerEntity.create!(name: params[:name],
 				email: params[:email],
 				mobile: params[:mobile])
 			user.create_customer_additional_info(birthday: params[:birthday],anniversary: params[:anniversary]) if params[:birthday].present? || params[:anniversary].present?
 			end
-			return true
+			return user
 	    rescue => e 
 			puts e.message
         	return false
@@ -37,7 +39,7 @@ class CustomerEntity < ActiveRecord::Base
 		end
 		return true
 		rescue => e
-			puts e.message
+			e.message
 			return false
 		end
     end
@@ -51,6 +53,18 @@ class CustomerEntity < ActiveRecord::Base
 		self.sales_flat_coupons.update_all(is_active: 0) if self.sales_flat_coupons
 	end
 
+    def get_customer_details
+		customer = {}
+		customer[:name] = self.name
+		customer[:email] = self.email
+		customer[:mobile] = self.mobile
+		customer_additional_info = self.customer_additional_info
+		if(customer_additional_info.present?)
+			customer[:birthday] = customer_additional_info["birthday"]
+			customer[:anniversary] = customer_additional_info["anniversary"]
+		end
+		customer
+    end
 
 
 end
