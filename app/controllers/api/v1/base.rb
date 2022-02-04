@@ -3,5 +3,6 @@ module API::V1
       version 'v1', using: :path
       format :json
       mount API::V1::Customer
+      mount API::V1::Coupon
     end
 end
