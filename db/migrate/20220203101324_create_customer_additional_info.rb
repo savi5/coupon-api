@@ -9,6 +9,6 @@ class CreateCustomerAdditionalInfo < ActiveRecord::Migration
   end
 
   def down
-     drop_table :customer_addtional_infos
+     drop_table :customer_additional_infos
   end
 end
