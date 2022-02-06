@@ -25,6 +25,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'mysql2', '~> 0.3.18'
 gem 'grape'
+gem 'sidekiq'
+gem 'redis'
+gem 'redis-namespace'
 
 
 # Use ActiveModel has_secure_password

@@ -6,6 +6,9 @@ class SalesFlatCoupon < ActiveRecord::Base
 
 	validate :is_exist?,on: :create
 
+	after_create -> {update_coupon_count(1)}
+	after_destroy -> {update_coupon_count(-1)}
+
 
 	def self.create_coupon params
 		begin
@@ -22,7 +25,7 @@ class SalesFlatCoupon < ActiveRecord::Base
     def update_coupon params
 		begin
 		  coupon = self.update(params)
-		return true
+		coupon
 		rescue => e
 			puts e.message
 			return false
@@ -37,5 +40,30 @@ class SalesFlatCoupon < ActiveRecord::Base
 	def is_exist?
 		coupon_exist = SalesFlatCoupon.where(coupon_type: self.coupon_type,customer_entity_id: self.customer_entity_id).first.blank?
 		errors.add(:coupon, "already exist" ) unless coupon_exist
+	end
+
+	def self.get_coupon_count
+		coupon_count = $redis.get("total_coupon_count")
+         if(coupon_count.blank?)
+            coupon_count = SalesFlatCoupon.count
+            $redis.set("total_coupon_count",coupon_count,ex: 24.hours)
+         end
+        coupon_count
+	end
+
+	def update_coupon_count(append)
+			coupon_count = SalesFlatCoupon.get_coupon_count.to_i + append
+			$redis.set("total_coupon_count",coupon_count,keepttl: true)
+	end
+
+	def get_coupon_details
+		coupon_details = {}
+		coupon_details[:customer_entity_id] = self.customer_entity_id
+		coupon_details[:coupon] = self.coupon
+		coupon_details[:coupon_type] = self.coupon_type
+		coupon_details[:is_active] = self.is_active
+		coupon_details[:is_used] = self.is_used
+		coupon_details[:expiry] = self.expiry
+		coupon_details
 	end
 end
