@@ -102,7 +102,15 @@ module API::V1
            desc 'Count of coupons'
            get '/count' do
                 coupon_count = SalesFlatCoupon.get_coupon_count
-                coupon_count
+                status = {}
+                    if coupon_count.blank?
+                        status(500)
+                        status = { code: false, message: 'Something went wrong' }
+                    else
+                        status(200)
+                        status = { code: true , message:'Coupon count fetched successfully',count: coupon_count}
+                    end
+                status
            end
 
         end
