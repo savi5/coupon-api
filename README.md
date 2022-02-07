@@ -19,6 +19,11 @@ Coupon generator system.
     $ rake db:migrate
     $ rake db:seed
 
+* Tables 
+     customer_entity(`name`, `email`, `mobile`, `created_at`, `updated_at`)
+     customer_additional_info(`customer_entity_id`, `birthday`, `anniversary`, `created_at`, `updated_at`)
+     sales_flat_coupon(`customer_entity_id`, `coupon`, `coupon_type`, `is_active`, `is_used`, `expiry`, `created_at`, `updated_at`)
+
 * How to run the test suite
 
     $ rspec
